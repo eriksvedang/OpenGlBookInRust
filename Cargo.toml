@@ -1,0 +1,14 @@
+[package]
+name = "OpenGlBookInRust"
+version = "0.1.0"
+authors = ["Erik Svedäng <erik.svedang@gmail.com>"]
+
+[[bin]]
+name = "chapter1"
+path = "src/chapter1.rs"
+
+[dependencies.gl]
+git = "https://github.com/bjz/gl-rs"
+
+[dependencies.glfw]
+git = "https://github.com/bjz/glfw-rs.git"
