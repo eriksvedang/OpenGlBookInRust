@@ -8,20 +8,19 @@ use std::ptr;
 use shader_loader::*;
 use gl::types::*;
 use glfw::{Context, OpenGlProfileHint, WindowHint, WindowMode};
-use std::ffi::CString;
 
 static VS_SRC: &'static str =
    "#version 330\n\
-    layout (location = 0) in vec2 position;\n\
-    void main() {\n\
-       gl_Position = vec4(position.xy, 0.0, 1.0);\n\
+    layout (location = 0) in vec2 position;\
+    void main() {\
+       gl_Position = vec4(position.xy, 0.0, 1.0);\
     }";
 
 static FS_SRC: &'static str =
    "#version 330\n\
-    out vec4 out_color;\n\
-    void main() {\n\
-       out_color = vec4(1.0, 1.0, 1.0, 1.0);\n\
+    out vec4 out_color;\
+    void main() {\
+       out_color = vec4(1.0, 1.0, 1.0, 1.0);\
     }";
 
 fn main() {
@@ -42,9 +41,14 @@ fn main() {
         gl::GenVertexArrays(1, &mut vao);
         gl::BindVertexArray(vao);
 
-        let data = [-0.8, 0.5,
-                    0.6, 0.0,
-                    -0.8, -0.5];
+        let vs = compile_shader(VS_SRC, gl::VERTEX_SHADER);
+        let fs = compile_shader(FS_SRC, gl::FRAGMENT_SHADER);
+        let program = link_program(vs, fs);
+        gl::UseProgram(program);
+
+        let data : [GLfloat; 6] = [-0.8, 0.5,
+                                   0.6, 0.0,
+                                   -0.8, -0.5];
 
         let mut vbo = 0;
         gl::GenBuffers(1, &mut vbo);
@@ -53,14 +57,6 @@ fn main() {
                        (data.len() * mem::size_of::<GLfloat>()) as GLsizeiptr,
                        mem::transmute(&data[0]),
                        gl::STATIC_DRAW);
-        
-        let vs = compile_shader(VS_SRC, gl::VERTEX_SHADER);
-        let fs = compile_shader(FS_SRC, gl::FRAGMENT_SHADER);
-        let program = link_program(vs, fs);
-        gl::UseProgram(program);
-
-        let c_str = CString::new("out_color").unwrap();
-        gl::BindFragDataLocation(program, 0, c_str.as_ptr());
 
         gl::EnableVertexAttribArray(0 as GLuint);
         gl::VertexAttribPointer(0 as GLuint, 2,

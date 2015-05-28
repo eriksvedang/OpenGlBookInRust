@@ -1,7 +1,6 @@
 extern crate gl;
 extern crate glfw;
 
-use std::str;
 use std::ptr;
 use std::ffi::CString;
 
@@ -12,12 +11,8 @@ pub fn compile_shader(src: &str, ty: GLenum) -> GLuint {
     let shader;
     unsafe {
         shader = gl::CreateShader(ty);
-        // Attempt to compile the shader
-        //let c_str = CString::from_slice(src.as_bytes());
-
-        let c_str = CString::new(src).unwrap();
         
-        gl::ShaderSource(shader, 1, &c_str.as_ptr(), ptr::null());
+        gl::ShaderSource(shader, 1, &CString::new(src).unwrap().as_ptr(), ptr::null());
         gl::CompileShader(shader);
 
         // Get the compile status
