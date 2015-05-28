@@ -5,7 +5,6 @@ use std::ptr;
 use std::ffi::CString;
 
 use gl::types::*;
-use glfw::{Context, OpenGlProfileHint, WindowHint, WindowMode};
 
 pub fn compile_shader(src: &str, ty: GLenum) -> GLuint {
     let shader;
