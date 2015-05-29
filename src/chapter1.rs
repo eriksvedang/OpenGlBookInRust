@@ -54,7 +54,7 @@ fn main() {
         gl::GenBuffers(1, &mut vbo);
         gl::BindBuffer(gl::ARRAY_BUFFER, vbo);
         gl::BufferData(gl::ARRAY_BUFFER,
-                       (data.len() * mem::size_of::<GLfloat>()) as GLsizeiptr,
+                       size_of_array(&data),
                        mem::transmute(&data[0]),
                        gl::STATIC_DRAW);
 
@@ -78,3 +78,8 @@ fn main() {
         window.swap_buffers();
     }
 }
+
+fn size_of_array<T>(array: &[T]) -> GLsizeiptr {
+    (array.len() * mem::size_of::<T>()) as GLsizeiptr
+}
+
